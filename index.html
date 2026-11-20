@@ -79,7 +79,8 @@
   .final .warn { margin: 14px auto 0; }
   .row { display: grid; grid-template-columns: 1.25fr 1fr; gap: 56px; align-items: center; margin-top: 110px; }
   .steps + .row { margin-top: 90px; }
-  .row:nth-of-type(even) .shot { order: 2; }
+  .row.flip { grid-template-columns: 1fr 1.25fr; }
+  .row.flip > :first-child { order: 2; }
   .row .shot { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: 0 18px 50px #0009; cursor: zoom-in; background: var(--panel); }
   .row p { color: var(--soft); margin: 12px 0 0; }
   .row ul { color: var(--soft); padding-left: 20px; margin: 12px 0 0; }
@@ -136,7 +137,6 @@
   .steps .step p { margin: 0; }
   .row .media { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: 0 18px 50px #0009; background: var(--panel); aspect-ratio: 8 / 5; }
   .row .media video, .row .media img { width: 100%; height: 100%; object-fit: cover; }
-  .row:nth-of-type(even) .media { order: 2; }
   .row h3 { font-size: 30px; }
   .marquee { margin-top: 48px; overflow: hidden; -webkit-mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
   .marquee .belt { display: flex; gap: 18px; width: max-content; animation: belt 40s linear infinite; }
@@ -180,6 +180,22 @@
   .waitlist .fine { flex-basis: 100%; color: var(--dim); font-size: 13px; margin: 2px 0 0; }
   .waitlist .done { flex-basis: 100%; color: var(--gold); font-weight: 600; margin: 4px 0 0; }
   .waitlist .hp { position: absolute; left: -9999px; }
+  .row .media { cursor: zoom-in; }
+  .stage { position: relative; }
+  .callout { position: absolute; right: -26px; bottom: -34px; width: 46%; border-radius: 14px; overflow: hidden; border: 3px solid var(--gold); box-shadow: 0 18px 40px #000c, 0 0 0 6px #07121f; background: #0d2136; cursor: zoom-in; transform: scale(.6); opacity: 0; transform-origin: 85% 85%; transition: transform .6s cubic-bezier(.2,.9,.3,1.2) .5s, opacity .4s ease .5s; }
+  .in .callout { transform: none; opacity: 1; }
+  .callout video { display: block; width: 100%; aspect-ratio: 8 / 5; object-fit: cover; }
+  .callout .tag { position: absolute; right: 8px; bottom: 8px; padding: 3px 8px; border-radius: 6px; background: #07121fd0; color: var(--gold); font: 700 12px/1.2 "Barlow Semi Condensed", sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+  .gallery button { position: relative; }
+  .gallery img { animation: drift 16s ease-in-out infinite alternate; }
+  .gallery button:nth-child(2n) img { animation-name: drift2; animation-duration: 19s; }
+  .gallery button:nth-child(3n) img { animation-duration: 22s; animation-delay: -6s; }
+  @keyframes drift { from { transform: scale(1.04) translate(-1.5%, -1%); } to { transform: scale(1.16) translate(2%, 1.5%); } }
+  @keyframes drift2 { from { transform: scale(1.15) translate(2%, -1.5%); } to { transform: scale(1.05) translate(-2%, 1%); } }
+  .gallery button:hover img { animation-play-state: paused; }
+  .gallery button::after { content: "⤢"; position: absolute; right: 8px; bottom: 8px; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; background: #07121fcc; color: var(--ink); font-size: 16px; opacity: 0; transition: opacity .2s; }
+  .gallery button:hover::after, .gallery button:focus-visible::after { opacity: 1; }
+  dialog video { border-radius: 10px; max-height: 88vh; max-width: min(1400px, 96vw); display: block; }
   .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
   .reveal.in { opacity: 1; transform: none; }
   .warn { margin-top: 12px; color: var(--soft); font-size: 14px; max-width: 620px; }
@@ -190,6 +206,8 @@
     .flags .belt.rev { display: none; }
     .marquee .belt [aria-hidden] { display: none; }
     .army .bar i { transition: none; width: var(--w); }
+    .gallery img { animation: none; }
+    .callout { transform: none; opacity: 1; transition: none; }
   }
   .final { text-align: center; background: radial-gradient(ellipse at 50% 0%, #17365c 0%, #07121f 70%); border-top: 1px solid var(--line); }
   .final p { color: var(--soft); max-width: 560px; margin: 12px auto 26px; }
@@ -218,11 +236,12 @@
     nav .links { display: none; }
     nav .cta { margin-left: auto; }
     .row { grid-template-columns: 1fr; gap: 18px; margin-top: 44px; }
-    .row:nth-of-type(even) .shot { order: 0; }
+    .row.flip > :first-child { order: 0; }
     .steps, .sizes, .tales, .packs, .learn { grid-template-columns: 1fr; }
     .expect { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .pace .ends { grid-template-columns: 1fr; gap: 26px; margin-top: 30px; }
-    .row:nth-of-type(even) .media { order: 0; }
+    .row.flip { grid-template-columns: 1fr; }
+    .callout { right: -6px; bottom: -22px; width: 52%; }
     .gallery { grid-template-columns: repeat(2, 1fr); }
     .stats .wrap { grid-template-columns: repeat(2, 1fr); }
     section.block { padding: 80px 0; }
@@ -369,20 +388,23 @@
     </div>
 
     <div class="row reveal">
-      <div class="media"><video data-clip muted loop playsinline preload="none" poster="assets/clip-attack.jpg" aria-label="Two attacks from Latvia on Sweden: curved arrows and troop ships crossing the Baltic"><source src="assets/clip-attack.mp4" type="video/mp4"></video></div>
+      <div class="media" data-zoom="assets/clip-attack.mp4"><video data-clip muted loop playsinline preload="none" poster="assets/clip-attack.jpg" aria-label="Two attacks from Latvia on Sweden: curved arrows and troop ships crossing the Baltic"><source src="assets/clip-attack.mp4" type="video/mp4"></video></div>
       <div><div class="kicker">War</div><h3>One attack, one region</h3><div class="chips"><span class="chip"><svg class="ico"><use href="#i-ship"/></svg>By land or by ship</span><span class="chip"><svg class="ico"><use href="#i-swords"/></svg>2–5 attacks at once</span><span class="chip"><svg class="ico"><use href="#i-home"/></svg>Soldiers march home</span></div></div>
     </div>
-    <div class="row reveal">
-      <div class="media" data-zoom="assets/shot-diplomacy.jpg"><img src="assets/shot-diplomacy.jpg" alt="Diplomacy panel with relations and offers" loading="lazy" width="1440" height="810"></div>
+    <div class="row reveal flip">
+      <div class="stage">
+        <div class="media" data-zoom="assets/clip-diplomacy.mp4"><video data-clip muted loop playsinline preload="none" poster="assets/clip-diplomacy.jpg" aria-label="Latvia sends goodwill missions to Finland and Belarus; both turn from neutral to friendly"><source src="assets/clip-diplomacy.mp4" type="video/mp4"></video></div>
+        <div class="callout" data-zoom="assets/clip-diplomacy-zoom.mp4"><span class="tag">Opinion</span><video data-clip muted loop playsinline preload="none" poster="assets/clip-diplomacy-zoom.jpg" aria-label="Close-up: Finland's opinion of Latvia rises from neutral to friendly"><source src="assets/clip-diplomacy-zoom.mp4" type="video/mp4"></video></div>
+      </div>
       <div><div class="kicker">Diplomacy</div><h3>Neighbours remember</h3><div class="chips"><span class="chip"><svg class="ico"><use href="#i-coins"/></svg>Trade deals</span><span class="chip"><svg class="ico"><use href="#i-hand"/></svg>Alliances</span><span class="chip"><svg class="ico"><use href="#i-scroll"/></svg>Truces</span><span class="chip"><svg class="ico"><use href="#i-dove"/></svg>Peace: keep or restore borders</span></div></div>
     </div>
     <div class="row reveal">
-      <div class="media"><video data-clip muted loop playsinline preload="none" poster="assets/clip-sites.jpg" aria-label="All fifteen strategic sites labelled on the map, then the Great Wall of China"><source src="assets/clip-sites.mp4" type="video/mp4"></video></div>
+      <div class="media" data-zoom="assets/clip-sites.mp4"><video data-clip muted loop playsinline preload="none" poster="assets/clip-sites.jpg" aria-label="All fifteen strategic sites labelled on the map, then the Great Wall of China"><source src="assets/clip-sites.mp4" type="video/mp4"></video></div>
       <div><div class="kicker">Strategic sites</div><h3>15 real places worth holding</h3><div class="chips"><span class="chip"><svg class="ico"><use href="#i-ship"/></svg>Trade +10%</span><span class="chip"><svg class="ico"><use href="#i-fort"/></svg>Defence +50%</span><span class="chip"><svg class="ico"><use href="#i-bolt"/></svg>Income +15%</span><span class="chip"><svg class="ico"><use href="#i-cap"/></svg>Recruits +15%</span></div></div>
     </div>
     <div class="marquee" aria-label="The fifteen strategic sites"><div class="belt"><figure><img src="assets/sites/suez.png" alt="Suez Canal" width="84" height="84" loading="lazy">Suez Canal</figure><figure><img src="assets/sites/panama.png" alt="Panama Canal" width="84" height="84" loading="lazy">Panama Canal</figure><figure><img src="assets/sites/singapore.png" alt="Singapore" width="84" height="84" loading="lazy">Singapore</figure><figure><img src="assets/sites/rotterdam.png" alt="Rotterdam" width="84" height="84" loading="lazy">Rotterdam</figure><figure><img src="assets/sites/bosphorus.png" alt="Bosphorus" width="84" height="84" loading="lazy">Bosphorus</figure><figure><img src="assets/sites/abqaiq.png" alt="Abqaiq" width="84" height="84" loading="lazy">Abqaiq</figure><figure><img src="assets/sites/ras-laffan.png" alt="Ras Laffan" width="84" height="84" loading="lazy">Ras Laffan</figure><figure><img src="assets/sites/itaipu.png" alt="Itaipu Dam" width="84" height="84" loading="lazy">Itaipu Dam</figure><figure><img src="assets/sites/tsukuba.png" alt="Tsukuba" width="84" height="84" loading="lazy">Tsukuba</figure><figure><img src="assets/sites/silicon-valley.png" alt="Silicon Valley" width="84" height="84" loading="lazy">Silicon Valley</figure><figure><img src="assets/sites/cern.png" alt="CERN" width="84" height="84" loading="lazy">CERN</figure><figure><img src="assets/sites/baikonur.png" alt="Baikonur" width="84" height="84" loading="lazy">Baikonur</figure><figure><img src="assets/sites/great-wall.png" alt="Great Wall" width="84" height="84" loading="lazy">Great Wall</figure><figure><img src="assets/sites/korean-dmz.png" alt="Korean DMZ" width="84" height="84" loading="lazy">Korean DMZ</figure><figure><img src="assets/sites/sandhurst.png" alt="Sandhurst" width="84" height="84" loading="lazy">Sandhurst</figure><figure aria-hidden="true"><img src="assets/sites/suez.png" alt="" width="84" height="84" loading="lazy">Suez Canal</figure><figure aria-hidden="true"><img src="assets/sites/panama.png" alt="" width="84" height="84" loading="lazy">Panama Canal</figure><figure aria-hidden="true"><img src="assets/sites/singapore.png" alt="" width="84" height="84" loading="lazy">Singapore</figure><figure aria-hidden="true"><img src="assets/sites/rotterdam.png" alt="" width="84" height="84" loading="lazy">Rotterdam</figure><figure aria-hidden="true"><img src="assets/sites/bosphorus.png" alt="" width="84" height="84" loading="lazy">Bosphorus</figure><figure aria-hidden="true"><img src="assets/sites/abqaiq.png" alt="" width="84" height="84" loading="lazy">Abqaiq</figure><figure aria-hidden="true"><img src="assets/sites/ras-laffan.png" alt="" width="84" height="84" loading="lazy">Ras Laffan</figure><figure aria-hidden="true"><img src="assets/sites/itaipu.png" alt="" width="84" height="84" loading="lazy">Itaipu Dam</figure><figure aria-hidden="true"><img src="assets/sites/tsukuba.png" alt="" width="84" height="84" loading="lazy">Tsukuba</figure><figure aria-hidden="true"><img src="assets/sites/silicon-valley.png" alt="" width="84" height="84" loading="lazy">Silicon Valley</figure><figure aria-hidden="true"><img src="assets/sites/cern.png" alt="" width="84" height="84" loading="lazy">CERN</figure><figure aria-hidden="true"><img src="assets/sites/baikonur.png" alt="" width="84" height="84" loading="lazy">Baikonur</figure><figure aria-hidden="true"><img src="assets/sites/great-wall.png" alt="" width="84" height="84" loading="lazy">Great Wall</figure><figure aria-hidden="true"><img src="assets/sites/korean-dmz.png" alt="" width="84" height="84" loading="lazy">Korean DMZ</figure><figure aria-hidden="true"><img src="assets/sites/sandhurst.png" alt="" width="84" height="84" loading="lazy">Sandhurst</figure></div></div>
-    <div class="row reveal">
-      <div class="media" data-zoom="assets/shot-globe.jpg"><img src="assets/shot-globe.jpg" alt="The world map as a lit globe" loading="lazy" width="1440" height="900"></div>
+    <div class="row reveal flip">
+      <div class="media" data-zoom="assets/clip-globe.mp4"><video data-clip muted loop playsinline preload="none" poster="assets/clip-globe.jpg" aria-label="The world as a spinning globe"><source src="assets/clip-globe.mp4" type="video/mp4"></video></div>
       <div><div class="kicker">The map</div><h3>From river towns to the globe</h3><div class="chips"><span class="chip"><svg class="ico"><use href="#i-river"/></svg>Rivers and towns</span><span class="chip"><svg class="ico"><use href="#i-layers"/></svg>2,400 regions</span><span class="chip"><svg class="ico"><use href="#i-globe"/></svg>Spin the globe</span></div></div>
     </div>
 
@@ -428,7 +450,7 @@
       <button type="button" data-zoom="assets/shot-upgrades.jpg"><img src="assets/shot-upgrades.jpg" alt="National upgrades" loading="lazy"></button>
       <button type="button" data-zoom="assets/shot-sites.jpg"><img src="assets/shot-sites.jpg" alt="The fifteen strategic sites on the world map" loading="lazy"></button>
       <button type="button" data-zoom="assets/shot-attack.jpg"><img src="assets/shot-attack.jpg" alt="Attack arrows and troop ships crossing the Baltic" loading="lazy"></button>
-      <button type="button" data-zoom="assets/shot-globe.jpg"><img src="assets/shot-globe.jpg" alt="The globe view" loading="lazy"></button>
+      <button type="button" data-zoom="assets/shot-diplomacy.jpg"><img src="assets/shot-diplomacy.jpg" alt="Diplomacy panel with relations and offers" loading="lazy"></button>
     </div>
   </div>
 </section>
@@ -495,6 +517,7 @@
 <dialog id="zoom" aria-label="Screenshot">
   <form method="dialog"><button aria-label="Close">Close ✕</button></form>
   <img alt="">
+  <video class="hidden" controls loop playsinline></video>
 </dialog>
 
 <script>
@@ -562,7 +585,16 @@
 
   // Screenshot lightbox.
   const dialog = $("zoom");
-  document.querySelectorAll("[data-zoom]").forEach(el => el.addEventListener("click", () => { dialog.querySelector("img").src = el.dataset.zoom; dialog.querySelector("img").alt = el.querySelector("img")?.alt || ""; dialog.showModal(); }));
+  const zImg = dialog.querySelector("img"), zVid = dialog.querySelector("video");
+  document.querySelectorAll("[data-zoom]").forEach(el => el.addEventListener("click", e => {
+    e.stopPropagation();
+    const src = el.dataset.zoom, isVideo = /\.mp4$/.test(src);
+    zImg.classList.toggle("hidden", isVideo); zVid.classList.toggle("hidden", !isVideo);
+    if (isVideo) { zVid.src = src; zVid.muted = true; zVid.play().catch(() => {}); }
+    else { zImg.src = src; zImg.alt = el.querySelector("img")?.alt || ""; }
+    dialog.showModal();
+  }));
+  dialog.addEventListener("close", () => { zVid.pause(); zVid.removeAttribute("src"); });
   dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
 
   if (!LAUNCHED) {
