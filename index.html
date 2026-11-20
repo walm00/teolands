@@ -283,6 +283,68 @@
     html { scroll-behavior: auto; }
     .button, .gallery img { transition: none; }
   }
+
+  /* Phones: framed hero visual, a vertical pace scale, denser grids and a swipe gallery. */
+  .hero-shot { display: none; }
+  @media (max-width: 700px) {
+    .hero { min-height: 0; }
+    .hero video, .hero .poster { display: none !important; }
+    .hero::after { display: none; }
+    .hero { background: radial-gradient(ellipse at 50% 0%, #17365c 0%, #07121f 70%); }
+    .hero .wrap { padding-top: 40px; padding-bottom: 40px; }
+    .hero img.logo { width: min(220px, 60vw); margin-bottom: 12px; }
+    .hero h1 { font-size: 36px; margin-bottom: 18px; }
+    .hero-shot { display: block; margin: 0 -4px 22px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 16px 40px #000c, 0 0 0 1px #dfbd7b33; }
+    .hero-shot img { width: 100%; height: auto; display: block; }
+    .trust { justify-content: center; }
+
+    .pace { margin-top: 28px; }
+    .pace .track { display: none; }
+    .pace .ends { position: relative; grid-template-columns: 1fr; gap: 14px; margin-top: 0; padding-left: 44px; text-align: left; }
+    .pace .ends::before { content: ""; position: absolute; left: 15px; top: 12px; bottom: 12px; width: 6px; border-radius: 6px; background: linear-gradient(180deg, #c2412d 0%, #3b5878 28%, #3b5878 72%, #5a4ab0 100%); }
+    .pace .end { position: relative; padding: 12px 14px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel); }
+    .pace .end::before { content: ""; position: absolute; left: -38px; top: 50%; width: 16px; height: 16px; margin-top: -11px; border-radius: 50%; background: #0d2136; border: 3px solid #8ea3b8; }
+    .pace .end.us { border-color: var(--gold); background: linear-gradient(180deg, #17365c 0%, var(--panel) 100%); }
+    .pace .end.us::before { left: -44px; width: 34px; height: 34px; margin-top: -17px; border: 0; background: url(assets/icon.png) center/cover; box-shadow: 0 0 0 3px var(--gold); }
+    .pace .end .chips { justify-content: flex-start; margin-top: 8px; }
+    .pace .end h3, .pace .end.us h3 { font-size: 21px; }
+
+    .learn { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .learn li { grid-template-columns: 1fr; justify-items: start; padding: 14px; gap: 4px; }
+    .learn .ico { grid-row: auto; width: 28px; height: 28px; }
+    .learn b { font-size: 18px; }
+    .learn span { font-size: 13.5px; }
+    .flags img { width: 54px; height: 40px; }
+
+    .steps .step { padding: 14px 16px; }
+    .stage { margin-bottom: 30px; }
+    .row { margin-top: 64px; gap: 20px; }
+
+    .tales { gap: 10px; }
+    .tale { grid-template-columns: 64px 1fr; justify-items: start; text-align: left; align-items: center; column-gap: 14px; row-gap: 2px; padding: 14px 16px; }
+    .tale img, .tale .badge { width: 64px; height: 64px; grid-row: span 2; }
+    .tale .badge .ico { width: 30px; height: 30px; }
+    .tale b { font-size: 19px; align-self: end; }
+    .tale span { align-self: start; }
+
+    .packs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .pack { padding: 16px 6px; gap: 6px; }
+    .pack .ico { width: 28px; height: 28px; }
+    .pack b { font-size: 15px; }
+    .pack .soon { font-size: 10px; padding: 3px 6px; letter-spacing: .06em; }
+
+    .gallery { display: flex; grid-template-columns: none; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; margin: 24px -16px 0; padding: 0 16px 10px; scrollbar-width: none; }
+    .gallery::-webkit-scrollbar { display: none; }
+    .gallery button { flex: 0 0 84%; scroll-snap-align: center; }
+    .gallery button::after { opacity: 1; }
+    .swipe-hint { display: block; text-align: center; color: var(--dim); font-size: 13px; margin-top: 6px; }
+
+    .expect li { padding: 12px 8px; font-size: 14px; }
+    section.block { padding: 64px 0; }
+    .story { margin-top: 90px; padding: 20px; }
+    .story p { font-size: 16.5px; }
+  }
+  .swipe-hint { display: none; }
 </style>
 </head>
 <body>
@@ -336,6 +398,7 @@
   <div class="wrap">
     <img class="logo" src="assets/logo.png" alt="TEOLANDS" width="640" height="160">
     <h1>Every country. Real borders. Your pace.</h1>
+    <div class="hero-shot" aria-hidden="true"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/attack.jpg"><img src="assets/attack.webp" alt="" width="600" height="375"></picture></div>
     <div class="actions">
       <a class="button primary" id="hero-win" href="#download"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10 4.5v7H3zm8-1.1L21 3v8.5H11zM3 12.5h7v7L3 18.5zm8 0h10V21l-10-1.4z"/></svg><span>Windows<span class="sub" id="hero-win-sub">Free · about 160 MB</span></span></a>
       <a class="button primary" id="hero-mac" href="#download"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.9-3-.9C6.9 7.2 5.4 8.1 4.6 9.6c-1.7 2.9-.4 7.2 1.2 9.6.8 1.2 1.8 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.8.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.8-1-2.8-4zM14.1 5.6c.6-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.4-.6.7-1.1 1.8-1 2.9 1.1.1 2.1-.5 2.8-1.3z"/></svg><span>Mac<span class="sub" id="hero-mac-sub">Free · Apple Silicon · about 165 MB</span></span></a>
@@ -496,6 +559,7 @@
       <button type="button" data-zoom="assets/hd/upgrades.jpg"><img src="assets/hd/upgrades-thumb.jpg" alt="Country upgrades: economy, military expertise, building, trade" loading="lazy" width="720" height="450"></button>
       <button type="button" data-zoom="assets/hd/baltic.jpg"><img src="assets/hd/baltic-thumb.jpg" alt="Latvia and its neighbours on the regional map" loading="lazy" width="720" height="450"></button>
     </div>
+    <p class="swipe-hint">Swipe for more · tap to zoom</p>
   </div>
 </section>
 
