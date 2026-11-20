@@ -297,6 +297,10 @@
     .hero-shot { display: block; margin: 0 -4px 22px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 16px 40px #000c, 0 0 0 1px #dfbd7b33; }
     .hero-shot img { width: 100%; height: auto; display: block; }
     .trust { justify-content: center; }
+    .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .actions .button { width: auto; padding: 12px 10px; gap: 9px; font-size: 18px; justify-content: center; }
+    .actions .button .sub { font-size: 12px; }
+    #hero-mobile:not(.hidden) { grid-column: 1 / -1; }
 
     .pace { margin-top: 28px; }
     .pace .track { display: none; }
